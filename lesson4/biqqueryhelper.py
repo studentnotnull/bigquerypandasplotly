@@ -5,35 +5,21 @@ import pandas as pd
 from bq_helper import BigQueryHelper
 client = BigQueryHelper('bigquery-public-data','stackoverflow')
 
-# query = "select * from bigquery-public-data.stackoverflow.users"
-#
-#
-# print(client.estimate_query_size(query))
 
-query = "select * from bigquery-public-data.stackoverflow.users where age is not null limit 1000"
 
-df1 = client.query_to_pandas(query)
+query = "select * from bigquery-public-data.stackoverflow.stackoverflow_posts "
 
-print(df1.head(10))
+df = client.query_to_pandas(query)
 
-print(df1.size)
+df.sort_values('answer_count',ascending=False, inplace=True)
+result = df.iloc[:2]
 
-query = "select * from bigquery-public-data.stackoverflow.users  limit 1000"
 
-df2 = client.query_to_pandas(query)
-print(df2.head(10))
+# VS
 
-print(df1.size)
 
-# df = client.query_to_pandas(query)
-#
-# print(df.head(10))
-#
-# print(df.columns)
-#
-#
-# print(df.age>10)
-#
-# new_df = df[ ['display_name', 'age']  ] [df.age>10]
+query = "select * from bigquery-public-data.stackoverflow.stackoverflow_posts order by answer_count desc limit 2"
 
-# print(new_df.head(10))
+df = client.query_to_pandas(query)
+
+print(df)
